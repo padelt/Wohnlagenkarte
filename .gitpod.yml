@@ -1,8 +1,15 @@
-ports:
-  - port: 8080
-    onOpen: open-preview
+# Build custom Docker container based on r-ver
+image:
+  file: GitPod/Dockerfile
+
+# Run shiny application on port 8080
 tasks:
   - command: >
-        cd py3-test &&
-        python3 -m pip install -r requirements.txt &&
-        python3 py3_test.py
+        R -e "library('shiny', lib.loc = '/home/gitpod/R/library'); runApp('./Shiny', port = 8080)"
+  - command: >
+        cd Webapp && python3 -m pip install -r requirements.txt && python3 app.py
+# Expose port 8080 and open preview in sidebar
+ports:
+  - port: 5050
+  - port: 8080
+    onOpen: open-preview
